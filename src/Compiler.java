@@ -66,7 +66,7 @@ public class Compiler {
                 ProgramNode ast = (ProgramNode) astBuilder.visit(tree);
                 GlobalScope globalScope = new GlobalScope();
                 new SymbolCollector(globalScope).visit(ast);
-//                new SemanticChecker(globalScope).visit(ast);
+               new SemanticChecker(globalScope).visit(ast);
 
                 IRProgram irprogram = new IRProgram();
                 new IRBuilder( irprogram,globalScope).visit(ast);
