@@ -16,10 +16,10 @@ public class ASMBlock {
   }
 
   public String toString() {
-    String ret = "";
-    if (name != null) ret += name + ":\n";
+    String shit_ins = "";
+    if (name != null) shit_ins += name + ":\n";
     for (ASMInst inst : insts)
-      ret += "  " + inst + "\n";
-    return ret;
+      shit_ins += "  " + inst + "\n";
+    return shit_ins;
   }
 }

@@ -4,7 +4,7 @@ import src.ASM.assembly.operand.*;
 
 public class ASMLoadInst extends ASMInst {
   int size;
-  // size : 1 -> lb, 4 -> lw
+  // size : 1 -> load_bite, 4 -> load_word
 
   public ASMLoadInst(int size, Reg rd, Reg rs1, Imm imm) {
     this.size = size;

@@ -5,7 +5,6 @@ import src.ASM.assembly.operand.*;
 public class ASMStoreInst extends ASMInst {
   int size;
   // size : 1 -> sb, 4 -> sw
-
   public ASMStoreInst(int size, Reg rs1, Reg rs2, Imm imm) {
     this.size = size;
     this.rs1 = rs1;

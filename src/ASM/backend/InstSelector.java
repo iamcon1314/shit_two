@@ -65,6 +65,16 @@ public class InstSelector implements IRVisitor, SomethingExisting {
       module.globalStrings.add(globalStr);
       str.asmReg = globalStr;
     });
+//    for (int i = 0; i < node.globalVarList.size(); i++) {
+//      IRGlobalVariable globalVar = node.globalVarList.get(i);
+//      globalVar.asmReg = new GlobalValue(globalVar);
+//      module.globalValues.add((GlobalValue) globalVar.asmReg);
+//    }
+//    for (IRStringConstant str : node.stringConst.values()) {
+//      GlobalString globalStr = new GlobalString(".str." + String.valueOf(str.id), str.val);
+//      module.globalStrings.add(globalStr);
+//      str.asmReg = globalStr;
+//    }
     if (node.initFunc != null) {
       curFunc = new ASMFunction(node.initFunc.name);
       module.functions.add(curFunc);
@@ -78,7 +88,7 @@ public class InstSelector implements IRVisitor, SomethingExisting {
   }
 
   public void visit(IRFunction node) {
-    // add params
+    // add paramsaa
     blockMap.clear();
     VirtualReg.cnt = 0;
     // find max argument cnt
@@ -92,10 +102,12 @@ public class InstSelector implements IRVisitor, SomethingExisting {
     curFunc.paramUsed = (maxArgCnt > 8 ? maxArgCnt - 8 : 0) << 2;
     // set params
     for (int i = 0; i < node.params.size(); ++i)
-      if (i < 8)
-        node.params.get(i).asmReg = PhysicsReg.regMap.get("a" + i);
-      else
-        node.params.get(i).asmReg = new VirtualReg(i);
+      if (i < 8) {
+          node.params.get(i).asmReg = PhysicsReg.regMap.get("a" + i);
+      }
+      else {
+          node.params.get(i).asmReg = new VirtualReg(i);
+      }
 
     for (int i = 0; i < node.blocks.size(); ++i) {
       curBlock = blockMap.get(node.blocks.get(i));
@@ -212,6 +224,17 @@ public class InstSelector implements IRVisitor, SomethingExisting {
     loadReg(4, PhysicsReg.regMap.get("ra"), PhysicsReg.regMap.get("sp"), curFunc.paramUsed);
     // 寄存器分配完再加 ret
   }
+
+
+//  void loadReg(int size, Reg dest, Reg src, int offset) {
+//    if (offset < 1 << 11)
+//      curBlock.addInst(new ASMLoadInst(size, dest, src, new Imm(offset)));
+//    else {
+//      VirtualReg tmp = new VirtualReg(4);
+//      curBlock.addInst(new ASMBinaryInst("add", tmp, src, new VirtualImm(offset)));
+//      curBlock.addInst(new ASMLoadInst(size, dest, tmp));
+//    }
+//  }
 
   public void visit(IRStoreInst node) {
     // store : rs2 -> (rs1) address

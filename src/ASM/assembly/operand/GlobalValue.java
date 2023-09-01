@@ -7,6 +7,7 @@ public class GlobalValue extends Global {
   public GlobalValue(IRGlobalVar var) {
     super(var.name);
     if (var.initVal instanceof IRIntConst) {
+//      word=var.initVal.val;
       word = ((IRIntConst) var.initVal).val;
       size = 4;
     } else if (var.initVal instanceof IRBoolConst) {

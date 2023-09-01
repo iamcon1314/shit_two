@@ -51,7 +51,7 @@ public class Compiler {
         public static void main(String[] args) throws Exception {
 
 //        try {
-            CharStream input = CharStreams.fromStream(new FileInputStream("1.cpp"));
+            CharStream input = CharStreams.fromStream(new FileInputStream("shitans/1.cpp"));
 //                CharStream input = CharStreams.fromStream(System.in);
 //
                 MxLexer lexer = new MxLexer(input);
@@ -66,19 +66,19 @@ public class Compiler {
                 ProgramNode ast = (ProgramNode) astBuilder.visit(tree);
                 GlobalScope globalScope = new GlobalScope();
                 new SymbolCollector(globalScope).visit(ast);
-//                new SemanticChecker(globalScope).visit(ast);
+                new SemanticChecker(globalScope).visit(ast);
 
                 IRProgram irprogram = new IRProgram();
                 new IRBuilder( irprogram,globalScope).visit(ast);
-//            String content1 = irprogram.toString();
-//            writeToFile("1.ll", content1);
+            String content1 = irprogram.toString();
+            writeToFile("shitans/1.ll", content1);
 
                 ASMModule asmModule = new ASMModule();
                 new InstSelector(asmModule).visit(irprogram);
                 new RegAllocator(asmModule).work();
                 String content = asmModule.toString();
-//            writeToFile("1.s", content);
-                System.out.print(content);
+            writeToFile("shitans/1.s", content);
+//                System.out.print(content);
 //        }
 //        catch (Throwable gb){
 //            System.out.print(gb.toString());

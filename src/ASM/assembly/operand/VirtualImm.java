@@ -6,7 +6,7 @@ public class VirtualImm extends Reg {
   public VirtualImm(int value) {
     this.value = value;
   }
-
+  public VirtualImm(){}
   public VirtualImm(IRConst constVal) {
     if (constVal instanceof IRIntConst) {
       value = ((IRIntConst) constVal).val;

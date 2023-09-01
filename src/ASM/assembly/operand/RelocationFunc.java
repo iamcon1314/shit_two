@@ -1,5 +1,6 @@
 //package assembly.operand;
 package src.ASM.assembly.operand;
+//表示汇编指令中的重定位函数。
 public class RelocationFunc extends Imm {
   public enum Type { hi, lo };
   public Type type;

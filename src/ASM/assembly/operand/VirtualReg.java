@@ -4,6 +4,7 @@ public class VirtualReg extends Reg {
   public int id = -1, param_idx = -1; // offset in stack frame
   public int size;
   public static int cnt = 0;
+  public VirtualReg(){}
   public VirtualReg(int size) {
     this.size = size;
     id = cnt++;

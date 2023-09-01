@@ -1,16 +1,15 @@
 //package assembly.operand;
 package src.ASM.assembly.operand;
 public class GlobalString extends Global {
-  public String str;
-
-  public GlobalString(String name, String str) {
+  public String glb_str;
+  public GlobalString(String name, String glb_str) {
     super(name);
-    this.str = str;
+    this.glb_str = glb_str;
   }
 
   public String toString() {
     String ret = name + ":\n";
-    ret += "  .string \"" + str.replace("\\", "\\\\")
+    ret += "  .string \"" + glb_str.replace("\\", "\\\\")
         .replace("\n", "\\n")
         .replace("\0", "")
         .replace("\t", "\\t")
