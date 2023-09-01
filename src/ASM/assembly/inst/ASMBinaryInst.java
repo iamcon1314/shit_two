@@ -14,13 +14,9 @@ public class ASMBinaryInst extends ASMInst {
 //shl：表示逻辑左移。在RISC-V指令集中，该操作符被转换为sll指令，用于将源寄存器1(rs1)的值向左移动源寄存器2(rs2)个位置，并将结果保存到目标寄存器(rd)中。
 //
 //ashr：表示算术右移。在RISC-V指令集中，该操作符被转换为sra指令，用于将源寄存器1(rs1)的值进行算术右移，位数由源寄存器2(rs2)指定，并将结果保存到目标寄存器(rd)中。
-//    switch (op) {
-//      case "sdiv": this.op = "div"; break;
-//      case "srem": this.op = "rem"; break;
-//      case "shl": this.op = "sll"; break;
-//      case "ashr": this.op = "sra"; break;
-//      default: this.op = op;
-//    }
+
+
+    this.op = op;
     this.rd = rd;
     this.rs1 = rs1;
     this.rs2 = rs2;
