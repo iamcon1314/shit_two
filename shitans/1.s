@@ -3,16 +3,16 @@
 gbzs:
 .L0:
   li t0, -36
-  null sp, sp, t0
+  add sp, sp, t0
   sw ra, 0(sp)
   li t0, 4
-  null t0, sp, t0
+  add t0, sp, t0
   sw t0, 16(sp)
   li t0, 8
-  null t0, sp, t0
+  add t0, sp, t0
   sw t0, 20(sp)
   li t0, 12
-  null t0, sp, t0
+  add t0, sp, t0
   sw t0, 24(sp)
   lw t1, 16(sp)
   sw a0, 0(t1)
@@ -33,17 +33,17 @@ gbzs:
   mv a0, t1
   lw ra, 0(sp)
   li t0, 36
-  null sp, sp, t0
+  add sp, sp, t0
   ret
   .text
   .globl main
 main:
 .L2:
   li t0, -20
-  null sp, sp, t0
+  add sp, sp, t0
   sw ra, 0(sp)
   li t0, 4
-  null t0, sp, t0
+  add t0, sp, t0
   sw t0, 8(sp)
   li t1, 4
   mv a0, t1
@@ -64,5 +64,5 @@ main:
   mv a0, t1
   lw ra, 0(sp)
   li t0, 20
-  null sp, sp, t0
+  add sp, sp, t0
   ret
