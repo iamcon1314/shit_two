@@ -70,8 +70,8 @@ public class Compiler {
 
                 IRProgram irprogram = new IRProgram();
                 new IRBuilder( irprogram,globalScope).visit(ast);
-            String content1 = irprogram.toString();
-            writeToFile("shitans/1.ll", content1);
+            // String content1 = irprogram.toString();
+            // writeToFile("shitans/1.ll", content1);
 
                 ASMModule asmModule = new ASMModule();
                 new InstSelector(asmModule).visit(irprogram);
