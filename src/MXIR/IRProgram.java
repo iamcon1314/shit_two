@@ -12,19 +12,15 @@ public class IRProgram implements SomethingExisting {
   public ArrayList<IRFunction> funcList = new ArrayList<IRFunction>();
   public ArrayList<IRGlobalVar> globalVarList = new ArrayList<IRGlobalVar>();
   public ArrayList<IRStructType> structTypeList = new ArrayList<IRStructType>();
-
   public HashMap<String, IRStringConst> stringConst = new HashMap<>();
-
   public IRFunction initFunc = new IRFunction("__mx_global_var_init", irVoidType), mainFunc;
   public IRBasicBlock initBlock = new IRBasicBlock(initFunc, "entry_");
-
   public IRProgram() {
     initFunc.appendBlock(initBlock);
     initFunc.exitBlock = new IRBasicBlock(initFunc, "return_");
     initBlock.terminalInst = new IRJumpInst(initBlock, initFunc.exitBlock);
     initFunc.exitBlock.terminalInst = new IRRetInst(initFunc.exitBlock, irVoidConst);
   }
-
   public IRStringConst addStringConst(String str) {
     // transfer escape characters
     String val = "";
@@ -43,6 +39,7 @@ public class IRProgram implements SomethingExisting {
       stringConst.put(val, new IRStringConst(val));
     return stringConst.get(val);
   }
+
 
   @Override
   public String toString() {

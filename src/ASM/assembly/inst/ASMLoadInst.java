@@ -7,6 +7,7 @@ public class ASMLoadInst extends ASMInst {
   // size : 1 -> load_bite, 4 -> load_word
 
   public ASMLoadInst(int size, Reg rd, Reg rs1, Imm imm) {
+    //    return "l" + (size == 1 ? "b" : "w") + " " + rd + ", " + imm + "(" + rs1 + ")";
     this.size = size;
     this.rd = rd;
     this.rs1 = rs1;
@@ -18,6 +19,6 @@ public class ASMLoadInst extends ASMInst {
 
   @Override
   public String toString() {
-    return "l" + (size == 1 ? "b" : "w") + " " + rd + ", " + imm + "(" + rs1 + ")";
+    return (size == 1 ? "lb" : "lw") + " " + rd + ", " + imm + "(" + rs1 + ")";
   }
 }

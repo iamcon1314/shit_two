@@ -21,9 +21,13 @@ public class ASMUnaryInst extends ASMInst {
 //
   @Override
   public String toString() {
-    if (imm == null)
+//    WA!
+//    return op + " " + rd + ", " + rs1 + ", " + imm;
+    if (imm == null) {
       return op + " " + rd + ", " + rs1;
-    else
+    }
+    else {
       return op + " " + rd + ", " + rs1 + ", " + imm;
+    }
   }
 }

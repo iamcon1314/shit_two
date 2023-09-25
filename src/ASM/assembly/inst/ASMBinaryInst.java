@@ -6,6 +6,7 @@ public class ASMBinaryInst extends ASMInst {
   String op;
 
   public ASMBinaryInst(String op, Reg rd, Reg rs1, Reg rs2) {
+    //return op + " " + rd + ", " + rs1 + ", " + rs2;
 
 //    sdiv：表示有符号整数除法。在RISC-V指令集中，该操作符被转换为div指令，用于将源寄存器1(rs1)的值除以源寄存器2(rs2)的值，并将结果保存到目标寄存器(rd)中。
 //
