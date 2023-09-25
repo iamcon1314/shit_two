@@ -72,16 +72,18 @@ public class Compiler {
                 new IRBuilder( irprogram,globalScope).visit(ast);
             // String content1 = irprogram.toString();
             // writeToFile("shitans/1.ll", content1);
-
+            // String content1 = irprogram.toString();
+            // writeToFile("shitans/1.ll", content1);
                 ASMModule asmModule = new ASMModule();
                 new InstSelector(asmModule).visit(irprogram);
                 new RegAllocator(asmModule).work();
                 String content = asmModule.toString();
             // writeToFile("shitans/1.s", content);
+            // writeToFile("shitans/2.s", content);
                System.out.print(content);
 //        }
-//        catch (Throwable gb){
-//            System.out.print(gb.toString());
+//        catch (Throwable gbzsworld){
+//            System.out.print(gbzsworld.toString());
 //        }
         }
 }
