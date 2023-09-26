@@ -142,12 +142,41 @@ public class InstSelector implements IRVisitor, SomethingExisting {
     // if (curFunc.totalStack % 16 != 0)
     //   curFunc.totalStack += 16 - curFunc.totalStack % 16;
 
-    ASMBlock entryBlock = curFunc.blocks.get(0), exitBlock = curFunc.blocks.get(curFunc.blocks.size() - 1);
-    entryBlock.insts.addFirst(new ASMBinaryInst("add", PhysicsReg.regMap.get("sp"), PhysicsReg.regMap.get("sp"),
-        new VirtualImm(-curFunc.totalStack)));
-    exitBlock.insts.add(new ASMBinaryInst("add", PhysicsReg.regMap.get("sp"), PhysicsReg.regMap.get("sp"),
-        new VirtualImm(curFunc.totalStack)));
-    exitBlock.insts.add(new ASMRetInst());
+//    ASMBlock entryBlock = curFunc.blocks.get(0), exitBlock = curFunc.blocks.get(curFunc.blocks.size() - 1);
+////    entryBlock.insts.addFirst(new ASMBinaryInst("add", PhysicsReg.regMap.get("sp"), PhysicsReg.regMap.get("sp"),
+////        new VirtualImm(-curFunc.totalStack)));
+////    exitBlock.insts.add(new ASMBinaryInst("add", PhysicsReg.regMap.get("sp"), PhysicsReg.regMap.get("sp"),
+////        new VirtualImm(curFunc.totalStack)));
+////    exitBlock.insts.add(new ASMRetInst());
+//
+//
+//    if (curFunc.totalStack < 1 << 11) {
+//      entryBlock.insts.addFirst(new ASMUnaryInst("addi", PhysicsReg.regMap.get("sp"), PhysicsReg.regMap.get("sp"),
+//              new Imm(-curFunc.totalStack)));
+//      exitBlock.insts.add(new ASMUnaryInst("addi", PhysicsReg.regMap.get("sp"), PhysicsReg.regMap.get("sp"),
+//              new Imm(curFunc.totalStack)));
+//    } else {
+//      entryBlock.insts.addFirst(new ASMBinaryInst("add", PhysicsReg.regMap.get("sp"), PhysicsReg.regMap.get("sp"),
+//              new VirtualImm(-curFunc.totalStack)));
+//      exitBlock.insts.add(new ASMBinaryInst("add", PhysicsReg.regMap.get("sp"), PhysicsReg.regMap.get("sp"),
+//              new VirtualImm(curFunc.totalStack)));
+//    }
+//    exitBlock.insts.add(new ASMRetInst());
+
+    curFunc.entryBlock = curFunc.blocks.get(0);
+    curFunc.exitBlock = curFunc.blocks.get(curFunc.blocks.size() - 1);
+    if (curFunc.totalStack < 1 << 11) {
+      curFunc.entryBlock.insts.addFirst(new ASMUnaryInst("addi", PhysicsReg.regMap.get("sp"),
+              PhysicsReg.regMap.get("sp"), new Imm(-curFunc.totalStack)));
+      curFunc.exitBlock.insts.add(new ASMUnaryInst("addi", PhysicsReg.regMap.get("sp"),
+              PhysicsReg.regMap.get("sp"), new Imm(curFunc.totalStack)));
+    } else {
+      curFunc.entryBlock.insts.addFirst(new ASMBinaryInst("add", PhysicsReg.regMap.get("sp"),
+              PhysicsReg.regMap.get("sp"), new VirtualImm(-curFunc.totalStack)));
+      curFunc.exitBlock.insts.add(new ASMBinaryInst("add", PhysicsReg.regMap.get("sp"),
+              PhysicsReg.regMap.get("sp"), new VirtualImm(curFunc.totalStack)));
+    }
+    curFunc.exitBlock.insts.add(new ASMRetInst());
   }
 
   public void visit(IRRetInst node) {
@@ -191,13 +220,42 @@ public class InstSelector implements IRVisitor, SomethingExisting {
     curFunc.allocaUsed += 4;
   }
 
+//  public void visit(IRBranchInst node) {
+//    curBlock.addInst(new ASMBeqzInst(getReg(node.cond), blockMap.get(node.elseBlock)));
+//    curBlock.addInst(new ASMJumpInst(blockMap.get(node.thenBlock)));
+//  }
+
+
   public void visit(IRBranchInst node) {
     curBlock.addInst(new ASMBeqzInst(getReg(node.cond), blockMap.get(node.elseBlock)));
+    curBlock.succ.add(blockMap.get(node.elseBlock));
+    blockMap.get(node.elseBlock).pred.add(curBlock);
     curBlock.addInst(new ASMJumpInst(blockMap.get(node.thenBlock)));
+    curBlock.succ.add(blockMap.get(node.thenBlock));
+    blockMap.get(node.thenBlock).pred.add(curBlock);
   }
 
   public void visit(IRCalcInst node) {
-    curBlock.addInst(new ASMBinaryInst(node.op, getReg(node.res), getReg(node.lhs), getReg(node.rhs)));
+//    curBlock.addInst(new ASMBinaryInst(node.op, getReg(node.res), getReg(node.lhs), getReg(node.rhs)));
+    switch (node.op) {
+      case "add":
+      case "and":
+      case "or":
+      case "xor":
+        if (node.lhs instanceof IRIntConst) {
+          IREntity tmp = node.lhs;
+          node.lhs = node.rhs;
+          node.rhs = tmp;
+        }
+        if (node.rhs instanceof IRIntConst && ((IRIntConst) node.rhs).val < 1 << 11
+                && ((IRIntConst) node.rhs).val >= -(1 << 11)) {
+          curBlock.addInst(new ASMUnaryInst(node.op + "i", getReg(node.res), getReg(node.lhs),
+                  new Imm(((IRIntConst) node.rhs).val)));
+          break;
+        }
+      default:
+        curBlock.addInst(new ASMBinaryInst(node.op, getReg(node.res), getReg(node.lhs), getReg(node.rhs)));
+    }
   }
 
   public void visit(IRCastInst node) {
@@ -247,11 +305,15 @@ public class InstSelector implements IRVisitor, SomethingExisting {
     }
   }
 
+//  public void visit(IRJumpInst node) {
+//    curBlock.addInst(new ASMJumpInst(blockMap.get(node.toBlock)));
+//  }
+
   public void visit(IRJumpInst node) {
     curBlock.addInst(new ASMJumpInst(blockMap.get(node.toBlock)));
+    curBlock.succ.add(blockMap.get(node.toBlock));
+    blockMap.get(node.toBlock).pred.add(curBlock);
   }
-
-
 
 
 

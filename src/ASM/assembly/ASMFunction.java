@@ -13,7 +13,7 @@ public class ASMFunction {
   public int allocaUsed = 4; // 4 for return address
   public int paramUsed = 0;
   public int totalStack = 0;
-
+  public ASMBlock entryBlock, exitBlock;
   public ASMFunction(String name) {
     this.name = name;
   }
